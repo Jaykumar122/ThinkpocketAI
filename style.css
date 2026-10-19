@@ -1,0 +1,2842 @@
+/* ==========================================================================
+   Thinkpocket AI — Apple-Style High-Performance Design System
+   Pure Vanilla CSS • Zero Dependencies • Hardware Accelerated
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --bg-black: #050608;
+  --bg-deep: #090a10;
+  --bg-surface: #10121a;
+  --bg-card: rgba(18, 20, 30, 0.75);
+  --bg-card-hover: rgba(26, 30, 46, 0.85);
+
+  /* Accents */
+  --accent-indigo: #6366f1;
+  --accent-purple: #a855f7;
+  --accent-pink: #ec4899;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+
+  /* Apple Intelligence Aura Gradients */
+  --grad-hero: linear-gradient(135deg, #ffffff 0%, #cbd5e1 45%, #818cf8 100%);
+  --grad-apple-glow: linear-gradient(135deg, #a855f7, #6366f1, #3b82f6, #06b6d4, #ec4899);
+  --grad-card-border: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.03));
+  --grad-titanium: linear-gradient(145deg, #2a2d36 0%, #15171e 50%, #2e323d 100%);
+
+  /* Borders & Glass */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.16);
+  --border-active: rgba(99, 102, 241, 0.6);
+  --glass-blur: blur(24px) saturate(180%);
+
+  /* Typography */
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Transitions */
+  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+  --trans-fast: 0.2s var(--ease-apple);
+  --trans-smooth: 0.4s var(--ease-apple);
+  --trans-slow: 0.7s var(--ease-apple);
+
+  /* Dynamic Mouse Follow Coordinates */
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+/* Base Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-main);
+  background-color: var(--bg-black);
+  color: #ffffff;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-black);
+  min-height: 100vh;
+  overflow-x: clip;
+  position: relative;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   RESILIENT CORE UTILITIES & LAYOUT (Works Offline & With Tailwind)
+   ========================================================================== */
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.hidden { display: none; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.max-w-7xl { max-width: 80rem; }
+.max-w-6xl { max-width: 72rem; }
+.max-w-5xl { max-width: 64rem; }
+.max-w-4xl { max-width: 56rem; }
+.max-w-3xl { max-width: 48rem; }
+.max-w-xl { max-width: 36rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.overflow-hidden { overflow: hidden; }
+.pointer-events-none { pointer-events: none; }
+.z-0 { z-index: 0; }
+.z-10 { z-index: 10; }
+.z-50 { z-index: 50; }
+.top-0 { top: 0; }
+.left-0 { left: 0; }
+.right-0 { right: 0; }
+.bottom-0 { bottom: 0; }
+
+@media (min-width: 768px) {
+  .md\:flex { display: flex; }
+  .md\:hidden { display: none; }
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .lg\:flex { display: flex; }
+  .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .lg\:col-span-2 { grid-column: span 2 / span 2; }
+  .lg\:col-span-5 { grid-column: span 5 / span 5; }
+  .lg\:col-span-7 { grid-column: span 7 / span 7; }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-indigo);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   AMBIENT LIGHTING & GLOW BACKGROUNDS
+   ========================================================================== */
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  opacity: 0.45;
+  animation: floatAura 20s infinite alternate ease-in-out;
+}
+
+.ambient-glow-1 {
+  width: 700px;
+  height: 700px;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(168, 85, 247, 0.2) 60%, transparent 80%);
+}
+
+.ambient-glow-2 {
+  width: 550px;
+  height: 550px;
+  top: 45%;
+  right: -100px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, rgba(99, 102, 241, 0.15) 70%, transparent 80%);
+  animation-duration: 25s;
+}
+
+.ambient-glow-3 {
+  width: 600px;
+  height: 600px;
+  top: 75%;
+  left: -150px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, rgba(168, 85, 247, 0.15) 60%, transparent 80%);
+  animation-duration: 22s;
+}
+
+.ambient-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, transparent 75%);
+}
+
+@keyframes floatAura {
+  0% { transform: translate(-50%, 0) scale(1); }
+  50% { transform: translate(-45%, 30px) scale(1.08); }
+  100% { transform: translate(-55%, -20px) scale(0.95); }
+}
+
+/* ==========================================================================
+   TYPOGRAPHY & GRADIENTS
+   ========================================================================== */
+.hero-gradient {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 25%, #6366f1 50%, #06b6d4 80%, #ffffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  background-size: 200% 200%;
+  animation: shineGradient 8s ease infinite;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes shineGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
+.glass-nav {
+  background: rgba(10, 12, 18, 0.7) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  transition: all var(--trans-smooth);
+}
+
+.nav-link {
+  position: relative;
+  padding: 4px 0;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--accent-indigo);
+  border-radius: 2px;
+  transition: width var(--trans-fast);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ==========================================================================
+   GLASSMORPHIC CARDS & BUTTONS
+   ========================================================================== */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--trans-smooth);
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-light);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(99, 102, 241, 0.1);
+  transform: translateY(-2px);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: #94a3b8;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+}
+
+.glass-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.glass-pill.active {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--accent-indigo);
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.glass-button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   3D TITANIUM SMARTPHONE MOCKUP
+   ========================================================================== */
+.perspective-container {
+  perspective: 1200px;
+}
+
+.phone-wrapper {
+  max-width: 350px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.phone-glow-aura {
+  position: absolute;
+  inset: -25px;
+  border-radius: 65px;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.2), transparent 70%);
+  filter: blur(40px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.phone-bezel {
+  position: relative;
+  width: 100%;
+  z-index: 2;
+  background: var(--grad-titanium);
+  padding: 8px;
+  border-radius: 46px;
+  box-shadow: 
+    0 30px 60px -15px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* Subtle Antenna Bands */
+.phone-bezel::before {
+  content: '';
+  position: absolute;
+  top: 90px;
+  left: -2px;
+  width: 4px;
+  height: 6px;
+  background: #3a3e4c;
+  border-radius: 2px;
+}
+
+.phone-bezel::after {
+  content: '';
+  position: absolute;
+  bottom: 90px;
+  right: -2px;
+  width: 4px;
+  height: 6px;
+  background: #3a3e4c;
+  border-radius: 2px;
+}
+
+.phone-screen {
+  position: relative;
+  width: 100%;
+  background: #090b12;
+  border-radius: 38px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.9);
+  aspect-ratio: 1280 / 2856;
+}
+
+.phone-screen-display {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #090b12;
+}
+
+.scrolly-screen-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 30px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease-out, visibility 0.35s ease-out;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.scrolly-screen-layer.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+#active-phone-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: opacity 0.3s ease, transform 0.4s ease;
+}
+
+/* Sleek Speaker Cutout at Top Bezel */
+.phone-speaker {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background: #1f2330;
+  border-radius: 2px;
+  z-index: 10;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes pulseIndicator {
+  0%, 100% { opacity: 0.6; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Glass Screen Glare Overlay */
+.screen-glare {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 60%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Orbiting Telemetry Badges */
+.telemetry-badge {
+  position: absolute;
+  z-index: 8;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: rgba(14, 16, 26, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  animation: floatBadge 6s infinite ease-in-out;
+}
+
+.telemetry-badge-1 {
+  top: 18%;
+  left: -130px;
+  animation-delay: 0s;
+}
+
+.telemetry-badge-2 {
+  top: 48%;
+  right: -130px;
+  animation-delay: 2s;
+}
+
+.telemetry-badge-3 {
+  bottom: 15%;
+  left: -120px;
+  animation-delay: 4s;
+}
+
+@keyframes floatBadge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ==========================================================================
+   BENTO GRID STYLING
+   ========================================================================== */
+.glass-bento-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--trans-smooth);
+}
+
+.glass-bento-card:hover {
+  border-color: var(--border-light);
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 35px rgba(99, 102, 241, 0.12);
+}
+
+.bento-bg-glow {
+  position: absolute;
+  top: var(--card-mouse-y, -100px);
+  left: var(--card-mouse-x, -100px);
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-bento-card:hover .bento-bg-glow {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   INTERACTIVE SIMULATOR
+   ========================================================================== */
+.sim-model-btn.active {
+  background: rgba(99, 102, 241, 0.2) !important;
+  border-color: var(--accent-indigo) !important;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+}
+
+.sim-spark:hover {
+  border-color: var(--accent-indigo);
+  color: #ffffff;
+}
+
+#sim-output-container::-webkit-scrollbar {
+  width: 6px;
+}
+#sim-output-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+/* Typewriter animation cursor */
+.typing-cursor::after {
+  content: '▋';
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--accent-indigo);
+  animation: blinkCursor 0.8s infinite;
+}
+
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ==========================================================================
+   TOUR CARDS & SHOWCASE
+   ========================================================================== */
+.tour-card {
+  border-left: 3px solid transparent;
+}
+
+.tour-card.active {
+  border-left-color: var(--accent-indigo);
+  background: rgba(26, 30, 48, 0.85);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateX(6px);
+}
+
+.tour-phone-frame {
+  max-width: 340px;
+  margin: 0 auto;
+  background: #090b12;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(99, 102, 241, 0.2);
+}
+
+#tour-main-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1280 / 2856;
+  object-fit: contain;
+  display: block;
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 5s infinite ease-in-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Reveal elements on scroll */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s var(--ease-apple), transform 0.8s var(--ease-apple);
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .telemetry-badge {
+    display: none !important;
+  }
+  .phone-wrapper {
+    max-width: 290px;
+  }
+  .hero-title {
+    font-size: 2.5rem !important;
+    line-height: 1.15;
+  }
+  .tour-card.active {
+    transform: none;
+  }
+  .video-timeline-container {
+    width: 95% !important;
+  }
+}
+
+/* ==========================================================================
+   JITTER-STYLE MOTION DESIGN & INTERACTIVE VIDEO STUDIO
+   ========================================================================== */
+
+/* Kinetic Hero Typography */
+.kinetic-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(35px) rotate(2.5deg) scale(0.92);
+  animation: kineticPop 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
+}
+
+@keyframes kineticPop {
+  0% {
+    opacity: 0;
+    transform: translateY(35px) rotate(2.5deg) scale(0.92);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-4px) rotate(-0.5deg) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+/* Floating Jitter Motion Stickers */
+.jitter-sticker {
+  position: absolute;
+  z-index: 25;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(14, 17, 28, 0.88);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(99, 102, 241, 0.2);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  user-select: none;
+  animation: stickerFloat 7s infinite ease-in-out;
+}
+
+.jitter-sticker:hover {
+  transform: scale(1.12) rotate(var(--hover-rot, 3deg)) translateY(-6px);
+  border-color: var(--accent-indigo);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.45);
+}
+
+.jitter-sticker-1 {
+  top: 8%;
+  left: -80px;
+  --hover-rot: -4deg;
+  animation-delay: 0s;
+}
+
+.jitter-sticker-2 {
+  top: 14%;
+  right: -80px;
+  --hover-rot: 5deg;
+  animation-delay: 1.8s;
+}
+
+.jitter-sticker-3 {
+  bottom: 22%;
+  left: -90px;
+  --hover-rot: 3deg;
+  animation-delay: 3.5s;
+}
+
+.jitter-sticker-4 {
+  bottom: 18%;
+  right: -85px;
+  --hover-rot: -5deg;
+  animation-delay: 5.2s;
+}
+
+@keyframes stickerFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(1.5deg); }
+}
+
+/* ==========================================================================
+   VIDEO STUDIO CANVAS & AFTER-EFFECTS / JITTER TIMELINE
+   ========================================================================== */
+.video-studio-stage {
+  background: rgba(10, 12, 20, 0.9);
+  backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 36px;
+  padding: 24px;
+  box-shadow: 
+    0 40px 80px -20px rgba(0, 0, 0, 0.9),
+    0 0 50px rgba(99, 102, 241, 0.15),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  margin-top: 24px;
+}
+
+/* Studio Window Header Chrome */
+.studio-window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 24px;
+  font-size: 11px;
+}
+
+.studio-window-dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.studio-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.studio-dot-red { background: #ff5f56; }
+.studio-dot-yellow { background: #ffbd2e; }
+.studio-dot-green { background: #27c93f; }
+
+.studio-comp-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.studio-aspect-btn {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.studio-aspect-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.studio-aspect-btn.active {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: var(--accent-indigo);
+  color: #ffffff;
+}
+
+/* Jitter Interactive Motion Presets Bar */
+.motion-presets-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.preset-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+}
+
+.preset-chip:hover {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: var(--accent-indigo);
+  color: #ffffff;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+}
+
+.preset-chip.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.4));
+  border-color: #a855f7;
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.4);
+}
+
+/* Video Canvas Phone Frame container adjustments */
+.studio-canvas-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Aspect ratio switches */
+.studio-canvas-stage.mode-cinema .phone-wrapper {
+  max-width: 480px;
+  transform: scale(0.92);
+}
+
+.studio-canvas-stage.mode-square .phone-wrapper {
+  max-width: 320px;
+}
+
+/* Video Specular Glare Scanline Beam */
+.video-scan-shimmer {
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    135deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(168, 85, 247, 0.18) 52%,
+    transparent 58%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  z-index: 15;
+  animation: videoScanline 5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes videoScanline {
+  0% { transform: translateY(-120%) rotate(25deg); }
+  35%, 100% { transform: translateY(120%) rotate(25deg); }
+}
+
+/* ==========================================================================
+   LIVE MOTION OVERLAYS (Inside Phone Display)
+   ========================================================================== */
+
+/* 1. Live Simulated Token Stream Overlay (Chat) */
+.live-token-stream-overlay {
+  position: absolute;
+  top: 18%;
+  left: 5%;
+  right: 5%;
+  z-index: 20;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(13, 16, 28, 0.94);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(99, 102, 241, 0.25);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #ffffff;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.live-token-stream-overlay.hidden-overlay {
+  opacity: 0;
+  transform: translateY(-15px) scale(0.95);
+  pointer-events: none;
+}
+
+.token-stream-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  font-size: 9px;
+  color: #a5b4fc;
+  font-weight: 700;
+}
+
+.token-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  line-height: 1.4;
+}
+
+.live-token-chip {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.25);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
+  animation: tokenSpring 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes tokenSpring {
+  0% { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 2. Live Diffusion Scanning Laser Beam (Studio) */
+.live-diffusion-scan {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.live-diffusion-scan.active-overlay {
+  opacity: 1;
+}
+
+.diffusion-laser-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ec4899, #a855f7, #6366f1, transparent);
+  box-shadow: 0 0 16px #ec4899, 0 0 30px #a855f7;
+  animation: laserScan 2.4s infinite ease-in-out;
+}
+
+@keyframes laserScan {
+  0%, 100% { top: 10%; opacity: 0.8; }
+  50% { top: 85%; opacity: 1; }
+}
+
+/* 3. Live Sonar Air-Gap Radar Overlay (Dashboard) */
+.live-sonar-radar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 18;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.live-sonar-radar.active-overlay {
+  opacity: 1;
+}
+
+.sonar-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(16, 185, 129, 0.7);
+  animation: sonarPing 2.5s infinite cubic-bezier(0, 0.2, 0.8, 1);
+}
+
+.sonar-ring:nth-child(2) {
+  animation-delay: 0.8s;
+}
+
+.sonar-ring:nth-child(3) {
+  animation-delay: 1.6s;
+}
+
+@keyframes sonarPing {
+  0% { transform: scale(0.2); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ==========================================================================
+   ADVANCED MULTI-TRACK VIDEO TIMELINE SCRUBBER
+   ========================================================================== */
+.multi-track-timeline {
+  margin-top: 24px;
+  background: rgba(14, 16, 26, 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 16px 20px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 30px rgba(99, 102, 241, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.timeline-control-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.timeline-left-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timeline-circle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.timeline-circle-btn:hover {
+  background: var(--accent-indigo);
+  border-color: #818cf8;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+}
+
+.timeline-circle-btn:active {
+  transform: scale(0.94);
+}
+
+/* 16-Bar Animated Equalizer Waveform */
+.motion-waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 22px;
+  padding: 0 8px;
+}
+
+.waveform-bar {
+  width: 3px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to top, #6366f1, #a855f7);
+  transition: height 0.1s ease;
+}
+
+.motion-waveform.playing .waveform-bar {
+  animation: waveDance 0.8s infinite alternate ease-in-out;
+}
+
+.motion-waveform.playing .waveform-bar:nth-child(2n) { animation-delay: 0.15s; }
+.motion-waveform.playing .waveform-bar:nth-child(3n) { animation-delay: 0.3s; }
+.motion-waveform.playing .waveform-bar:nth-child(4n) { animation-delay: 0.45s; }
+.motion-waveform.playing .waveform-bar:nth-child(5n) { animation-delay: 0.6s; }
+
+@keyframes waveDance {
+  0% { height: 4px; opacity: 0.4; }
+  100% { height: 20px; opacity: 1; }
+}
+
+.timeline-speed-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timeline-speed-chip {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.timeline-speed-chip:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.timeline-speed-chip.active {
+  background: rgba(99, 102, 241, 0.3);
+  border-color: var(--accent-indigo);
+  color: #ffffff;
+}
+
+/* Multi-Track Canvas Scrubber */
+.tracks-canvas-wrap {
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.timeline-track-lane {
+  position: relative;
+  height: 20px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.timeline-track-lane:last-child {
+  margin-bottom: 0;
+}
+
+.track-label {
+  width: 90px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #94a3b8;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.track-lane-rail {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: visible;
+}
+
+.track-lane-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+  width: 0%;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+  transition: width 0.05s linear;
+}
+
+/* Diamond Keyframes */
+.keyframe-diamonds-row {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.keyframe-diamond {
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.35);
+  transform: rotate(45deg);
+  border-radius: 1px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.keyframe-diamond.active-keyframe {
+  background: #ffffff;
+  box-shadow: 0 0 8px #ffffff, 0 0 14px var(--accent-indigo);
+  transform: rotate(45deg) scale(1.35);
+}
+
+/* Glowing Playhead Needle Line */
+.timeline-needle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0%;
+  width: 2px;
+  background: #06b6d4;
+  box-shadow: 0 0 10px #06b6d4, 0 0 20px #06b6d4;
+  pointer-events: none;
+  z-index: 10;
+  transition: left 0.05s linear;
+}
+
+.timeline-needle::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: #06b6d4;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
+/* ==========================================================================
+   MOTION CURSOR & CLICK RIPPLES
+   ========================================================================== */
+.motion-cursor {
+  position: absolute;
+  z-index: 40;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: top 0.75s cubic-bezier(0.25, 1, 0.5, 1), left 0.75s cubic-bezier(0.25, 1, 0.5, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.8));
+  opacity: 0;
+}
+
+.motion-cursor.visible {
+  opacity: 1;
+}
+
+.motion-cursor.clicking {
+  transform: translate(-50%, -50%) scale(0.78);
+}
+
+.click-ripple {
+  position: absolute;
+  z-index: 39;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid rgba(168, 85, 247, 0.9);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.click-ripple.animate {
+  animation: rippleExpand 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes rippleExpand {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; }
+}
+
+/* Motion Caption Floating Badge */
+.motion-caption-badge {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: rgba(10, 12, 22, 0.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(99, 102, 241, 0.25);
+  z-index: 30;
+  text-align: center;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ==========================================================================
+   JITTER MOTION STUDIO PLAYGROUND SECTION
+   ========================================================================== */
+.playground-stage-box {
+  background: radial-gradient(circle at center, rgba(30, 35, 55, 0.8) 0%, rgba(10, 12, 20, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+.playground-target-item {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity;
+}
+
+/* Interactive Motion Action Classes */
+.motion-anim-spring {
+  animation: jitterSpring 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.motion-anim-stagger {
+  animation: jitterStagger 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.motion-anim-elastic {
+  animation: jitterElastic 1.1s cubic-bezier(0.68, -0.6, 0.32, 1.6) forwards;
+}
+
+.motion-anim-pulse {
+  animation: jitterPulse 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+.motion-anim-glitch {
+  animation: jitterGlitch 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes jitterSpring {
+  0% { transform: scale(0.4) translateY(60px); opacity: 0; }
+  60% { transform: scale(1.15) translateY(-10px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes jitterStagger {
+  0% { transform: translateX(-80px) rotate(-8deg); opacity: 0; }
+  70% { transform: translateX(8px) rotate(2deg); opacity: 1; }
+  100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+}
+
+@keyframes jitterElastic {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.3, 0.7); }
+  50% { transform: scale(0.8, 1.2); }
+  75% { transform: scale(1.1, 0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes jitterPulse {
+  0% { transform: scale(0.96); filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.4)); }
+  100% { transform: scale(1.05); filter: drop-shadow(0 0 35px rgba(236, 72, 153, 0.8)); }
+}
+
+@keyframes jitterGlitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-5px, 5px) skewX(4deg); }
+  40% { transform: translate(5px, -5px) skewX(-4deg); }
+  60% { transform: translate(-3px, -2px); }
+  80% { transform: translate(2px, 3px); }
+  100% { transform: translate(0) skewX(0deg); }
+}
+
+/* Jitter-Style Infinite Marquee Banner */
+.marquee-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding: 16px 0;
+  mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+}
+
+.marquee-content {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: marqueeScroll 32s linear infinite;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(12px);
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.marquee-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   HUNGRY TIGER AESTHETIC & MOTION EXTENSIONS
+   Film grain, 3D scroll perspective, word-by-word scrubbing & editorial accents
+   ========================================================================== */
+
+/* 1. Tactile Film Grain Overlay (Hungry Tiger signature) */
+.hungry-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 3px 3px;
+  z-index: 9999;
+  opacity: 0.7;
+}
+
+/* 2. Hungry Tiger Dotted Line Accents */
+.dotted-line-accent {
+  height: 4px;
+  width: 100%;
+  background-image: repeating-radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.85) 0,
+    rgba(99, 102, 241, 0.85) 2px,
+    transparent 2px,
+    transparent 10px
+  );
+  background-size: 10px 4px;
+  background-repeat: repeat-x;
+}
+
+.dotted-line-amber {
+  height: 4px;
+  width: 100%;
+  background-image: repeating-radial-gradient(
+    circle,
+    #f59e0b 0,
+    #f59e0b 2px,
+    transparent 2px,
+    transparent 10px
+  );
+  background-size: 10px 4px;
+  background-repeat: repeat-x;
+}
+
+.dotted-line-emerald {
+  height: 4px;
+  width: 100%;
+  background-image: repeating-radial-gradient(
+    circle,
+    #10b981 0,
+    #10b981 2px,
+    transparent 2px,
+    transparent 10px
+  );
+  background-size: 10px 4px;
+  background-repeat: repeat-x;
+}
+
+/* 3. Word-by-Word Scroll Scrubbing ([scrub-each-word]) */
+.scrub-text {
+  display: inline;
+}
+
+.scrub-word {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.22);
+  transform: translateY(3px);
+  transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              text-shadow 0.35s ease;
+  will-change: color, transform, text-shadow;
+  margin-right: 0.28em;
+}
+
+.scrub-word.active {
+  color: #ffffff;
+  transform: translateY(0);
+  text-shadow: 0 0 18px rgba(129, 140, 248, 0.45);
+}
+
+.scrub-word.highlight {
+  color: #818cf8;
+  transform: translateY(0);
+  text-shadow: 0 0 24px rgba(129, 140, 248, 0.75);
+}
+
+/* 4. Hungry Tiger 3D Scroll Perspective Stage */
+.ht-3d-stage {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.ht-3d-phone {
+  transform-style: preserve-3d;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.ht-3d-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: 44px;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 50%, rgba(99, 102, 241, 0.2) 100%);
+  mix-blend-mode: overlay;
+  transition: opacity 0.3s ease;
+}
+
+/* 5. Hungry Tiger Floating Tactical Dock */
+.ht-dock-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: rgba(12, 14, 22, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: 999px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(99, 102, 241, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ht-dock-widget:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.7), 0 0 32px rgba(99, 102, 241, 0.4);
+}
+
+@media (max-width: 639px) {
+  .ht-dock-widget {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    gap: 4px;
+    max-width: calc(100vw - 20px);
+  }
+
+  .ht-dock-widget:hover {
+    transform: translateX(-50%) translateY(-2px);
+  }
+}
+
+.ht-angle-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ht-angle-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ht-angle-btn.active {
+  color: #ffffff;
+  background: rgba(99, 102, 241, 0.28);
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.35);
+}
+
+/* 6. Editorial Typography & Number Badges */
+.editorial-caption {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-weight: 800;
+  color: #818cf8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ht-number-chip {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  color: #a5b4fc;
+}
+
+/* 7. Texture Masked Headlines */
+.text-textured {
+  background-image: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ==========================================================================
+   ADVANCED MOTION & FINETUNE ENGINE: Hungry Tiger & Jitter Synergies
+   - Smooth Scroll Progress Bar
+   - Awwwards Fluid Magnetic Cursor
+   - 3D Spatial Orbital Badges (TranslateZ with float bobbing)
+   - Interactive 3D Bento Card Tilt with Dynamic Specular Glare
+   - Flowing Dotted Line Marquee Animation
+   - Enhanced Spring-Pop Word Scrubbing
+   ========================================================================== */
+
+/* 1. Global Viewport Scroll Progress Bar */
+.ht-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, #6366f1 0%, #a855f7 35%, #ec4899 70%, #10b981 100%);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.9), 0 0 24px rgba(236, 72, 153, 0.6);
+  z-index: 10000;
+  pointer-events: none;
+  transition: width 0.08s ease-out;
+}
+
+/* 2. Fluid Magnetic Follower Cursor (Desktop Only) */
+.ht-cursor-dot,
+.ht-cursor-ring {
+  display: none;
+}
+
+@media (pointer: fine) and (hover: hover) {
+  .ht-cursor-dot {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    background: #ffffff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10001;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+
+  .ht-cursor-ring {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(129, 140, 248, 0.65);
+    background: rgba(99, 102, 241, 0.05);
+    backdrop-filter: blur(2px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease,
+                background-color 0.25s ease;
+  }
+
+  .ht-cursor-ring.active-hover {
+    width: 58px;
+    height: 58px;
+    border-color: rgba(236, 72, 153, 0.9);
+    background: rgba(236, 72, 153, 0.12);
+  }
+}
+
+/* 3. 3D Spatial Orbital Badges */
+.ht-orbital-tag {
+  position: absolute;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(12, 14, 24, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(18px);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e2e8f0;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 20px rgba(99, 102, 241, 0.25);
+  pointer-events: auto;
+  user-select: none;
+  animation: htFloatBob 4s ease-in-out infinite alternate;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.ht-orbital-tag:hover {
+  border-color: rgba(129, 140, 248, 0.7);
+  color: #ffffff;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 28px rgba(99, 102, 241, 0.5);
+}
+
+.ht-tag-1 { top: 12%; left: -6%; animation-delay: 0s; }
+.ht-tag-2 { bottom: 18%; left: -8%; animation-delay: 1.2s; }
+.ht-tag-3 { top: 20%; right: -6%; animation-delay: 0.6s; }
+.ht-tag-4 { bottom: 14%; right: -8%; animation-delay: 1.8s; }
+
+@keyframes htFloatBob {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1.5deg); }
+  100% { transform: translateY(6px) rotate(-1.5deg); }
+}
+
+@media (max-width: 1024px) {
+  .ht-orbital-tag {
+    display: none;
+  }
+}
+
+/* 4. Active Flowing Dotted Lines */
+.dotted-line-accent, .dotted-line-amber, .dotted-line-emerald {
+  animation: dottedFlow 20s linear infinite;
+}
+
+@keyframes dottedFlow {
+  from { background-position: 0 0; }
+  to { background-position: 100px 0; }
+}
+
+/* 5. Dynamic Specular Sheen for Bento & Feature Cards */
+.glass-bento-card, .glass-card {
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+  transform-style: preserve-3d;
+}
+
+.card-specular-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle 320px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.12), transparent 70%);
+  z-index: 2;
+}
+
+.glass-bento-card:hover .card-specular-glare,
+.glass-card:hover .card-specular-glare {
+  opacity: 1;
+}
+
+/* 6. Live FPS Hardware Metric Badge */
+.live-fps-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #34d399;
+}
+
+/* ==========================================================================
+   TITANIUM FINISH COLORWAY PRESETS (Apple iPhone 16 Pro Style)
+   ========================================================================== */
+.finish-pill {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background: transparent;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.finish-pill:hover {
+  transform: scale(1.18);
+}
+
+.finish-pill.active {
+  border-color: #ffffff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  transform: scale(1.12);
+}
+
+/* Natural Titanium (Default Platinum Grey) */
+.phone-bezel.finish-natural {
+  background: linear-gradient(135deg, #e2e8f0 0%, #475569 35%, #94a3b8 70%, #1e293b 100%) !important;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.22), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Desert Titanium (Warm Bronze Gold) */
+.phone-bezel.finish-desert {
+  background: linear-gradient(135deg, #fef3c7 0%, #b45309 35%, #f59e0b 70%, #78350f 100%) !important;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(245, 158, 11, 0.4), inset 0 1px 2px rgba(254, 243, 199, 0.6) !important;
+}
+
+/* Black Titanium (Stealth Matte Onyx) */
+.phone-bezel.finish-black {
+  background: linear-gradient(135deg, #4b5563 0%, #111827 35%, #1f2937 70%, #030712 100%) !important;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.98), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Blue Titanium (Deep Cosmic Indigo) */
+.phone-bezel.finish-blue {
+  background: linear-gradient(135deg, #60a5fa 0%, #1e1b4b 35%, #4338ca 70%, #0f172a 100%) !important;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(96, 165, 250, 0.35), inset 0 1px 2px rgba(147, 197, 253, 0.5) !important;
+}
+
+/* Dynamic 3D Floor Shadow with Ambient Occlusion */
+.phone-shadow-3d {
+  position: absolute;
+  bottom: -40px;
+  left: 12%;
+  width: 76%;
+  height: 42px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.94) 0%, rgba(99, 102, 241, 0.3) 35%, transparent 75%);
+  filter: blur(18px);
+  z-index: 1;
+  pointer-events: none;
+  transform-origin: center center;
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+/* Interactive Dynamic Island (Expandable Camera Pill) */
+.phone-dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 24px;
+  min-width: 90px;
+  background: #000000;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+  z-index: 25;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 4px 12px rgba(0, 0, 0, 0.85);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.phone-dynamic-island:hover, .phone-dynamic-island.expanded {
+  min-width: 240px;
+  height: 32px;
+  padding: 0 16px;
+  background: rgba(10, 12, 22, 0.98);
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 24px rgba(99, 102, 241, 0.5), 0 8px 24px rgba(0, 0, 0, 0.95);
+}
+
+.island-camera {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #334155, #000000 70%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.island-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: #a5b4fc;
+  white-space: nowrap;
+}
+
+.island-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+}
+
+/* Giant Editorial Background Parallax Watermarks (Hungry Tiger signature) */
+.giant-editorial-watermark {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(3.5rem, 11vw, 10rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.035);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+/* Sound Indicator Pulse */
+.sound-fx-active {
+  color: #34d399 !important;
+  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+/* ==========================================================================
+   HUNGRY TIGER FULL-SCREEN STICKY 3D SCROLLYTELLING JOURNEY
+   Optimized for: Phones, Tablets (iPads/Tabs), Laptops, and Macs
+   ========================================================================== */
+.scrolly-container {
+  position: relative;
+  height: clamp(4000px, 480vh, 5600px);
+  background: #030407;
+}
+
+#video-walkthrough {
+  position: relative;
+  z-index: 25;
+  background: #030407;
+}
+
+.scrolly-viewport {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport units for mobile address bar collapse */
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Background Atmosphere */
+.scrolly-ambient-halo {
+  position: absolute;
+  width: clamp(340px, 55vw, 750px);
+  height: clamp(340px, 55vw, 750px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.28) 0%, rgba(168, 85, 247, 0.15) 45%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 0.6s ease-out, background 0.8s ease;
+}
+
+.scrolly-watermark-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(2.5rem, 11vw, 12rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.04);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Center 3D Stage with Safari WebKit hardware acceleration */
+.scrolly-3d-stage {
+  position: relative;
+  z-index: 10;
+  perspective: 1500px;
+  -webkit-perspective: 1500px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.scrolly-phone {
+  position: relative;
+  width: clamp(260px, 22vw, 340px);
+  max-height: 72vh;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  pointer-events: auto;
+  margin: 28px auto 0 auto;
+}
+
+/* Base Scrollytelling Narrative Overlay & Chapter Cards */
+.scrolly-narrative-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.scrolly-chapter-card {
+  position: absolute;
+  top: 50%;
+  left: clamp(4vw, 5.5vw, 7vw);
+  max-width: clamp(380px, 30vw, 470px);
+  padding: clamp(22px, 2vw, 32px);
+  transform: translateY(-50%) scale(0.96);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  border-radius: 26px;
+  background: rgba(10, 12, 22, 0.92);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85),
+              0 0 35px rgba(99, 102, 241, 0.15);
+  transition: opacity 0.2s ease-out,
+              transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.2s ease-out;
+  will-change: opacity, transform;
+}
+
+.scrolly-chapter-card.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-50%) scale(1);
+}
+
+/* Compact Laptop / Low-Height Viewports (< 720px) */
+@media (max-height: 720px) {
+  .scrolly-phone {
+    max-height: 56vh !important;
+    width: clamp(210px, 20vw, 260px) !important;
+    margin: 10px auto 0 auto !important;
+  }
+  .scrolly-chapter-card {
+    padding: 16px 20px !important;
+    max-height: 75vh !important;
+  }
+  .scrolly-chapter-card h2 {
+    font-size: clamp(1.35rem, 2.5vw, 1.8rem) !important;
+    line-height: 1.15 !important;
+    margin-bottom: 6px !important;
+  }
+  .scrolly-chapter-card p {
+    font-size: 12.5px !important;
+    line-height: 1.45 !important;
+    margin-bottom: 6px !important;
+  }
+  .scrolly-chapter-card .tactile-stamp-badge {
+    margin-bottom: 4px !important;
+  }
+  .scrolly-chapter-card .dotted-line-accent,
+  .scrolly-chapter-card .dotted-line-amber,
+  .scrolly-chapter-card .dotted-line-emerald {
+    margin-top: 4px !important;
+    margin-bottom: 6px !important;
+  }
+}
+
+/* 1. Mobile Phone Specifics (< 640px) */
+@media (max-width: 639px) {
+  .scrolly-phone {
+    width: clamp(185px, 48vw, 220px);
+    max-height: 48vh;
+    top: -10vh !important; /* Lift phone into top half so bottom card never collides */
+  }
+
+  .scrolly-chapter-card {
+    position: absolute !important;
+    top: auto !important;
+    left: 14px !important;
+    right: 14px !important;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 14px) !important;
+    max-width: none !important;
+    padding: 14px 16px;
+    border-radius: 20px;
+    background: rgba(8, 10, 18, 0.94);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 20px rgba(99, 102, 241, 0.18);
+    max-height: 36vh;
+    overflow-y: auto;
+    transform: translateY(15px) scale(0.96) !important;
+  }
+
+  .scrolly-chapter-card.active {
+    transform: translateY(0) scale(1) !important;
+  }
+
+  .scrolly-chapter-card h2 {
+    font-size: clamp(1.15rem, 5vw, 1.5rem) !important;
+    line-height: 1.18 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .scrolly-chapter-card p {
+    font-size: 11.5px !important;
+    line-height: 1.4 !important;
+    margin-bottom: 6px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .scrolly-chapter-card .tactile-stamp-badge {
+    padding: 3px 8px;
+    font-size: 8.5px;
+    margin-bottom: 6px;
+  }
+
+  .scrolly-chapter-card .tactile-barcode {
+    display: none; /* Hide barcode on small phones to maximize text readability */
+  }
+
+  .scrolly-chapter-card .dotted-line-accent,
+  .scrolly-chapter-card .dotted-line-amber,
+  .scrolly-chapter-card .dotted-line-emerald {
+    margin-top: 4px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .scrolly-tracker {
+    display: none; /* Hide dots on mobile to keep interface minimal */
+  }
+}
+
+/* 2. Tablet Specifics (640px to 1023px, iPad portrait and landscape) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .scrolly-phone {
+    width: clamp(230px, 32vw, 280px);
+    max-height: 54vh;
+    top: -5vh;
+  }
+
+
+  .scrolly-chapter-card {
+    position: absolute;
+    left: 5vw;
+    right: 5vw;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+    max-width: none;
+    padding: 22px 26px;
+    border-radius: 24px;
+    background: rgba(9, 11, 20, 0.92);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .scrolly-chapter-card h2 {
+    font-size: clamp(1.6rem, 3.8vw, 2.2rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  .scrolly-chapter-card p {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  .scrolly-tracker {
+    right: 2vw;
+    gap: 12px;
+  }
+
+  .scrolly-tracker-num {
+    display: none;
+  }
+}
+
+/* Tablet Landscape: Side-by-Side View */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+  .scrolly-phone {
+    top: 0;
+    width: clamp(210px, 26vw, 260px);
+  }
+
+  .scrolly-chapter-card {
+    top: 50%;
+    bottom: auto;
+    max-width: 380px;
+    padding: 20px 24px;
+    transform: translateY(calc(-50% + 20px)) scale(0.96);
+  }
+
+  .scrolly-chapter-card.active {
+    transform: translateY(-50%) scale(1);
+  }
+
+  .scrolly-chapter-card[data-chapter="0"],
+  .scrolly-chapter-card[data-chapter="2"] {
+    left: 4vw;
+    right: auto;
+  }
+
+  .scrolly-chapter-card[data-chapter="1"],
+  .scrolly-chapter-card[data-chapter="3"] {
+    right: 4vw;
+    left: auto;
+  }
+}
+
+/* 3. Laptops & Macs (1024px to 1440px) */
+@media (min-width: 1024px) {
+  .scrolly-phone {
+    width: clamp(260px, 22vw, 340px);
+    max-height: 72vh;
+    top: 0;
+  }
+
+
+
+  .scrolly-chapter-card {
+    position: absolute;
+    top: 50%;
+    bottom: auto;
+    max-width: clamp(380px, 30vw, 470px);
+    padding: clamp(22px, 2vw, 32px);
+    border-radius: 26px;
+    transform: translateY(calc(-50% + 20px)) scale(0.96);
+  }
+
+  .scrolly-chapter-card.active {
+    transform: translateY(-50%) scale(1);
+  }
+
+  .scrolly-chapter-card h2 {
+    font-size: clamp(1.85rem, 2.4vw, 2.65rem) !important;
+    line-height: 1.12 !important;
+    letter-spacing: -0.03em;
+  }
+
+  .scrolly-chapter-card p {
+    font-size: clamp(13px, 0.95vw, 15px) !important;
+    line-height: 1.6 !important;
+  }
+
+  .scrolly-chapter-card[data-chapter="0"],
+  .scrolly-chapter-card[data-chapter="2"] {
+    left: clamp(4vw, 5.5vw, 7vw);
+    right: auto;
+  }
+
+  .scrolly-chapter-card[data-chapter="1"],
+  .scrolly-chapter-card[data-chapter="3"] {
+    right: clamp(4vw, 5.5vw, 7vw);
+    left: auto;
+  }
+}
+
+/* 4. Large External Mac Displays / 4K Monitors (1600px+) */
+@media (min-width: 1600px) {
+  .scrolly-phone {
+    width: 370px;
+    max-height: 75vh;
+  }
+
+  .scrolly-chapter-card {
+    max-width: 520px;
+    padding: 34px 38px;
+  }
+
+  .scrolly-chapter-card[data-chapter="0"],
+  .scrolly-chapter-card[data-chapter="2"] {
+    left: 8vw;
+  }
+
+  .scrolly-chapter-card[data-chapter="1"],
+  .scrolly-chapter-card[data-chapter="3"] {
+    right: 8vw;
+  }
+}
+
+/* Tactile Editorial Elements */
+.tactile-stamp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #a5b4fc;
+}
+
+.tactile-barcode {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Scrolly Progress Tracker Pinned on Right */
+.scrolly-tracker {
+  position: absolute;
+  right: clamp(1.5vw, 2.5vw, 3.5vw);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 30;
+}
+
+@media (max-width: 1023px) {
+  .scrolly-tracker {
+    display: none;
+  }
+}
+
+.scrolly-tracker-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 4px;
+}
+
+.scrolly-tracker-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scrolly-tracker-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.3);
+  transition: all 0.35s ease;
+}
+
+.scrolly-tracker-item.active .scrolly-tracker-dot {
+  width: 14px;
+  height: 14px;
+  background: #818cf8;
+  box-shadow: 0 0 18px #818cf8;
+}
+
+.scrolly-tracker-item.active .scrolly-tracker-num {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   MULTI-DEVICE RESPONSIVE OPTIMIZATION SUITE:
+   Deep Mobile Phone Ergonomics (320px - 480px), Phablets (< 640px), & Tablets (< 768px)
+   ========================================================================== */
+
+/* Universal Mobile Hardening & Viewport Safety */
+html, body {
+  overflow-x: clip !important;
+  width: 100%;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Touch optimization - eliminate 300ms tap delay & accidental double-tap zoom on controls */
+a, button, input, select, textarea,
+.screen-pill, .preset-chip, .sim-model-btn, .sim-spark,
+.faq-btn, .tour-card, .finish-pill, .ht-angle-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent iOS Safari viewport auto-zoom when tapping inputs */
+@media (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* ==========================================================================
+   TABLET & MOBILE BREAKPOINT (< 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Ergonomic Section Spacing on Handhelds */
+  section:not(#scrolly-journey) {
+    padding-top: 4.5rem !important;
+    padding-bottom: 4.5rem !important;
+    max-width: 100vw;
+    overflow-x: clip;
+  }
+
+  /* Tour Cards in App Tour */
+  .tour-card {
+    padding: 1.15rem !important;
+    border-radius: 1.15rem !important;
+  }
+
+  /* Bento Feature Grid on Handhelds */
+  .glass-bento-card {
+    padding: 1.35rem !important;
+  }
+}
+
+/* ==========================================================================
+   PHABLET & STANDARD MOBILE BREAKPOINT (< 640px)
+   ========================================================================== */
+@media (max-width: 639px) {
+  /* 1. Global Card & Container Geometry */
+  .glass-bento-card, 
+  .glass-card {
+    padding: 1.15rem !important;
+    border-radius: 1.25rem !important;
+  }
+
+  .video-studio-stage {
+    padding: 0.85rem !important;
+    border-radius: 1.25rem !important;
+    margin-top: 14px !important;
+  }
+
+  /* 2. Top Navigation Bar */
+  .glass-nav {
+    padding: 7px 12px !important;
+    margin-top: 8px !important;
+  }
+
+  /* 3. Hero Section Typography & Layout */
+  .hero-title {
+    font-size: clamp(2.1rem, 8.5vw, 3.25rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  /* 4. Motion Presets Bar - Slick Swipeable Horizontal Row */
+  .motion-presets-bar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 6px 8px !important;
+    gap: 6px !important;
+    margin-bottom: 14px !important;
+    border-radius: 14px !important;
+  }
+  .motion-presets-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .preset-chip {
+    flex-shrink: 0 !important;
+    padding: 5px 11px !important;
+    font-size: 10px !important;
+    min-height: 32px;
+  }
+
+  /* 5. Screen Switcher Pills - Slick Swipeable Horizontal Row */
+  .screen-pills-row,
+  .screen-pill-container {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 6px !important;
+    gap: 6px !important;
+  }
+  .screen-pills-row::-webkit-scrollbar,
+  .screen-pill-container::-webkit-scrollbar {
+    display: none;
+  }
+  .screen-pill {
+    flex-shrink: 0 !important;
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+    min-height: 32px;
+  }
+
+  /* 6. Studio Header Window Bar */
+  .studio-window-bar {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .studio-comp-title {
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .timeline-speed-chip,
+  .studio-aspect-btn,
+  .finish-pill {
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 7. Studio Smartphone Stage & Overlays */
+  .phone-wrapper {
+    max-width: clamp(230px, 72vw, 290px) !important;
+  }
+
+  .phone-bezel {
+    padding: 6px !important;
+    border-radius: 36px !important;
+  }
+
+  .phone-screen {
+    border-radius: 30px !important;
+  }
+
+  .phone-dynamic-island {
+    height: 22px !important;
+    padding: 2px 8px !important;
+  }
+  .phone-dynamic-island .island-text {
+    font-size: 9px !important;
+  }
+
+  .live-token-stream-overlay {
+    padding: 7px 9px !important;
+    border-radius: 12px !important;
+    font-size: 8.5px !important;
+  }
+  .live-token-chip {
+    padding: 1.5px 5px !important;
+    font-size: 8px !important;
+  }
+
+  .motion-caption-badge {
+    bottom: 8px !important;
+    padding: 3px 8px !important;
+    font-size: 9px !important;
+    max-width: 90% !important;
+  }
+
+  /* 8. Multi-Track Video Timeline Scrubber */
+  .multi-track-timeline {
+    margin-top: 14px !important;
+    padding: 12px 14px !important;
+    border-radius: 18px !important;
+    gap: 10px !important;
+  }
+
+  .timeline-control-header {
+    gap: 8px !important;
+  }
+
+  .timeline-circle-btn {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .motion-waveform {
+    height: 18px !important;
+    gap: 2px !important;
+  }
+  .motion-waveform .waveform-bar:nth-child(n+9) {
+    display: none !important; /* Keep 8 clean bars on mobile to prevent crowding */
+  }
+
+  .timeline-speed-chip {
+    padding: 2.5px 6px !important;
+    font-size: 9px !important;
+    min-height: 26px !important;
+  }
+
+  .track-label {
+    width: 60px !important;
+    font-size: 8px !important;
+  }
+
+  .timeline-track-lane {
+    height: 16px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .keyframe-diamond {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  /* 9. Live Token Streaming Simulator */
+  #sim-model-selector {
+    gap: 6px !important;
+  }
+  .sim-model-btn {
+    padding: 8px 10px !important;
+  }
+
+  #sim-output-container {
+    height: 320px !important;
+    font-size: 11.5px !important;
+    padding: 12px !important;
+  }
+
+  /* 10. Modality Filter Buttons - Horizontal Swipeable Row */
+  #modality-filters {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 8px !important;
+    margin-bottom: 18px !important;
+    gap: 6px !important;
+  }
+  #modality-filters::-webkit-scrollbar {
+    display: none;
+  }
+  .model-filter-btn {
+    flex-shrink: 0 !important;
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+  }
+
+  /* 11. Floating 3D Angle Dock */
+  .ht-dock-widget {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    padding: 4px 6px !important;
+    gap: 3px !important;
+    max-width: calc(100vw - 16px) !important;
+    z-index: 35 !important;
+  }
+  .ht-dock-widget:hover {
+    transform: translateX(-50%) translateY(-2px) !important;
+  }
+  .ht-angle-btn {
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+    gap: 3px !important;
+  }
+  .ht-dock-widget.dock-hidden-mobile {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateX(-50%) translateY(20px) !important;
+  }
+
+  /* 12. App Tour Mobile Frame */
+  .tour-phone-frame {
+    max-width: 250px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border-radius: 32px !important;
+    padding: 8px !important;
+  }
+  .tour-phone-frame img {
+    border-radius: 26px !important;
+  }
+
+  /* 13. FAQ Accordion Item Touch Padding */
+  .faq-btn {
+    padding: 14px 16px !important;
+    font-size: 13.5px !important;
+  }
+  .faq-content {
+    padding: 0 16px 16px !important;
+    font-size: 12.5px !important;
+  }
+}
+
+/* ==========================================================================
+   EXTRA-COMPACT MOBILE BREAKPOINT (< 400px - iPhone SE, Galaxy Fold outer, etc.)
+   ========================================================================== */
+@media (max-width: 399px) {
+  /* Brand Badge Hide */
+  .brand-version-badge {
+    display: none !important;
+  }
+
+  /* Hero Headline */
+  .hero-title {
+    font-size: 1.85rem !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Top Pill */
+  .hero-pill-badge {
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+  }
+
+  /* Studio Stage */
+  .phone-wrapper {
+    max-width: 220px !important;
+  }
+
+  /* Hide textual labels on tactical dock for tiny screens */
+  .ht-angle-btn span:nth-child(2) {
+    display: none;
+  }
+  .ht-angle-btn {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+  }
+
+  /* Single Column Simulator Model Selector on ultra-narrow phones */
+  #sim-model-selector {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Playhead Needle label */
+  .track-label {
+    width: 48px !important;
+    font-size: 7.5px !important;
+  }
+}
+
+/* Mac & High-DPI Trackpad / Inertia Smoothness */
+@media (hover: hover) and (pointer: fine) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+/* WebKit-Specific 3D Compositing for Mac Safari & iOS */
+@supports (-webkit-hyphens: none) {
+  .scrolly-phone,
+  .ht-3d-phone,
+  .phone-screen,
+  .phone-bezel {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+
+
+
+
